@@ -4,11 +4,11 @@ import {
   ChevronLast,
   ChevronLeft,
   ChevronRight,
-  ClipboardList,
+  ClipboardEdit,
   FileText,
   Filter,
   Search,
-  User,
+  ChevronDown,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -29,34 +29,35 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage,
-  } from "@/components/ui/avatar"
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 export default function ListTable({ data }) {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(6);
-  
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+
   const getInitials = (name) => {
     const namesArray = name.split(" ");
     if (namesArray.length === 1) return namesArray[0].charAt(0).toUpperCase();
     return namesArray[0].charAt(0).toUpperCase() + namesArray[1].charAt(0).toUpperCase();
   };
-  
+
   const UserAvatar = ({ trainee }) => (
     <Avatar>
-<AvatarImage src={trainee.avat2} alt={trainee.name} />
-<AvatarFallback>{getInitials(trainee.name)}</AvatarFallback>
+      <AvatarImage src={trainee.avatar} alt={trainee.name} />
+      <AvatarFallback>{getInitials(trainee.name)}</AvatarFallback>
     </Avatar>
   );
-
 
   const TableContent = ({ trainee }) => (
     <>
       <TableCell className="table-cell">
-        <div className="w-10 h-10 rounded-full overflow-hidden">
+        <div className="w-10 h-10 rounded-full">
           <UserAvatar trainee={trainee} />
         </div>
       </TableCell>
@@ -66,44 +67,54 @@ export default function ListTable({ data }) {
       <TableCell className="">{trainee.course}</TableCell>
       <TableCell className="">{trainee.year}</TableCell>
       <TableCell>
-        <span
-          className={`px-2 py-1 rounded-full text-white ${
-            trainee.deployed ? "bg-green-500" : "bg-red-500"
-          }`}
-        >
+        <Badge variant={trainee.deployed ? "default" : "destructive"}>
           {trainee.deployed ? "YES" : "NO"}
-        </span>
+        </Badge>
       </TableCell>
       <TableCell className="table-cell">
-        <span className="px-2 py-1 rounded-full bg-gray-700 text-white">
-          -
-        </span>
+        <Badge variant={trainee.evaluated ? "default" : "secondary"}>
+          {trainee.evaluated ? "Completed" : "Pending"}
+        </Badge>
       </TableCell>
       <TableCell className="table-cell">
-        <span
-          className={`px-2 py-1 rounded-full text-white ${
-            trainee.completed ? "bg-green-500" : "bg-red-500"
-          }`}
-        >
+        <Badge variant={trainee.completed ? "default" : "destructive"}>
           {trainee.completed ? "YES" : "NO"}
-        </span>
+        </Badge>
       </TableCell>
 
       <TableCell>
         <div className="flex gap-2">
-          <Button variant="outline" size="icon">
-            <ClipboardList className="h-4 w-4 text-blue-500" />
+        <Button variant="outline" size="icon">
+            <FileText className="h-4 w-4 text-blue-500" />
           </Button>
           <Button variant="outline" size="icon">
-            <FileText className="h-4 w-4 text-green-500" />
+            <ClipboardEdit className="h-4 w-4 text-green-500" />
           </Button>
         </div>
       </TableCell>
     </>
   );
 
+  const handleSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedTrainees = [...data].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? 1 : -1;
+    }
+    return 0;
+  });
+
   // Filter trainees based on search
-  const filteredTrainees = data.filter(
+  const filteredTrainees = sortedTrainees.filter(
     (trainee) =>
       trainee.name.toLowerCase().includes(search.toLowerCase()) ||
       trainee.email.toLowerCase().includes(search.toLowerCase()) ||
@@ -117,7 +128,7 @@ export default function ListTable({ data }) {
   const currentTrainees = filteredTrainees.slice(startIndex, endIndex);
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-4 space-y-4">
+    <div className="w-full mx-auto p-4 space-y-4">
       <div className="flex flex-col sm:flex-row justify-between gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -134,19 +145,104 @@ export default function ListTable({ data }) {
         </Button>
       </div>
 
-      <div className="border rounded-lg overflow-x-auto max-w-[90dvw]">
-        <Table className="max-w-full">
+      <div className="border rounded-lg overflow-x-auto max-w-[100vw]">
+        <Table className="min-w-[800px] bg-card">
           <TableHeader>
             <TableRow>
-              <TableHead className="">PROFILE</TableHead>
-              <TableHead>NAME</TableHead>
-              <TableHead className="">EMAIL</TableHead>
-              <TableHead>STUDENT ID</TableHead>
-              <TableHead className="">COURSE</TableHead>
-              <TableHead className="">YEAR</TableHead>
-              <TableHead>DEPLOYED</TableHead>
-              <TableHead className="">EVALUATED</TableHead>
-              <TableHead className="">COMPLETED</TableHead>
+              <TableHead>
+                PROFILE
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center">
+                NAME
+                <ChevronDown
+                  className={`ml-2 h-4 w-4 cursor-pointer transition-transform ${
+                    sortConfig.key === 'name' && sortConfig.direction === 'ascending' ? 'rotate-180' : ''
+                  }`}
+                  onClick={() => handleSort('name')}
+                />
+                </div>
+                
+              </TableHead>
+              <TableHead>
+              <div className="flex items-center">
+                EMAIL
+                <ChevronDown
+                  className={`ml-2 h-4 w-4 cursor-pointer transition-transform ${
+                    sortConfig.key === 'email' && sortConfig.direction === 'ascending' ? 'rotate-180' : ''
+                  }`}
+                  onClick={() => handleSort('email')}
+                />
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center">
+                STUDENT ID
+                <ChevronDown
+                  className={`ml-2 h-4 w-4 cursor-pointer transition-transform ${
+                    sortConfig.key === 'studentId' && sortConfig.direction === 'ascending' ? 'rotate-180' : ''
+                  }`}
+                  onClick={() => handleSort('studentId')}
+                />
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center">
+                COURSE
+                <ChevronDown
+                  className={`ml-2 h-4 w-4 cursor-pointer transition-transform ${
+                    sortConfig.key === 'course' && sortConfig.direction === 'ascending' ? 'rotate-180' : ''
+                  }`}
+                  onClick={() => handleSort('course')}
+                />
+                </div>
+                
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center">
+                YEAR
+                <ChevronDown
+                  className={`ml-2 h-4 w-4 cursor-pointer transition-transform ${
+                    sortConfig.key === 'year' && sortConfig.direction === 'ascending' ? 'rotate-180' : ''
+                  }`}
+                  onClick={() => handleSort('year')}
+                />
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center">
+                DEPLOYED
+                <ChevronDown
+                  className={`ml-2 h-4 w-4 cursor-pointer transition-transform ${
+                    sortConfig.key === 'deployed' && sortConfig.direction === 'ascending' ? 'rotate-180' : ''
+                  }`}
+                  onClick={() => handleSort('deployed')}
+                />    
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center">
+                EVALUATED
+                <ChevronDown
+                  className={`ml-2 h-4 w-4 cursor-pointer transition-transform ${
+                    sortConfig.key === 'evaluated' && sortConfig.direction === 'ascending' ? 'rotate-180' : ''
+                  }`}
+                  onClick={() => handleSort('evaluated')}
+                />
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center">
+                COMPLETED
+                <ChevronDown
+                  className={`ml-2 h-4 w-4 cursor-pointer transition-transform ${
+                    sortConfig.key === 'completed' && sortConfig.direction === 'ascending' ? 'rotate-180' : ''
+                  }`}
+                  onClick={() => handleSort('completed')}
+                />
+                </div>
+
+              </TableHead>
               <TableHead>ACTIONS</TableHead>
             </TableRow>
           </TableHeader>
@@ -160,12 +256,12 @@ export default function ListTable({ data }) {
         </Table>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row-reverse items-center justify-between gap-4">
         <p className="text-sm text-muted-foreground order-2 sm:order-1">
           Showing {startIndex + 1} - {Math.min(endIndex, filteredTrainees.length)} out of{" "}
           {filteredTrainees.length}
         </p>
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col md:flex-row items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm">Number of Rows:</span>
             <Select
@@ -186,10 +282,8 @@ export default function ListTable({ data }) {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-sm">
-              Page {currentPage} out of {totalPages}
-            </span>
+          <div className="flex flex-col md:flex-row-reverse items-center gap-2">
+           
             <div className="flex gap-1">
               <Button
                 variant="outline"
@@ -224,6 +318,9 @@ export default function ListTable({ data }) {
                 <ChevronLast className="h-4 w-4" />
               </Button>
             </div>
+            <span className="text-sm">
+              Page {currentPage} out of {totalPages}
+            </span>
           </div>
         </div>
       </div>

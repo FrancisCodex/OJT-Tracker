@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { SearchIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Moon, Bell, Search, Mail } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ThemeToggle } from "./ui/theme-toggle";
+
 
 export function DashNavbar() {
   const searchInputRef = useRef(null);
@@ -21,16 +23,25 @@ export function DashNavbar() {
   }, []);
 
   return (
-    <div className="container flex h-16 items-center justify-end px-4 md:px-6">
-      <div className="relative w-full max-w-md md:max-w-sm">
-        <Input
-          type="search"
-          placeholder="Search..."
-          className="h-10 w-full rounded-lg bg-muted pl-8 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          startIcon={SearchIcon}
-          endIcon={null}
-          ref={searchInputRef}
-        />
+    <div className="flex w-full items-center justify-between px-4 md:px-6">
+      <div className="flex relative w-full max-w-md md:max-w-sm">
+        <div className="flex w-full max-w-md items-center gap-2">
+          <Search className="h-4 w-4 text-muted-foreground" />
+          <Input className="h-8" placeholder="Search..." ref={searchInputRef} />
+        </div>
+      </div>
+      <div className="ml-auto flex items-center gap-4">
+        <Button variant="ghost" size="icon" className="relative">
+          <Bell className="h-4 w-4" />
+          <span className="absolute -right-1 -top-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
+            2
+          </span>
+        </Button>
+        <Button variant="ghost" size="icon">
+          <Mail className="h-4 w-4" />
+        </Button>
+        {/* Light Mode Switcher */}
+        <ThemeToggle/>
       </div>
     </div>
   );

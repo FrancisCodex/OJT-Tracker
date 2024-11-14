@@ -23,6 +23,8 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import OJT_Logo from '@/assets/images/Logo_icon.svg'
+import Sidebar_Logo from "./sidebar_logo"
 
 // This is sample data.
 const data = {
@@ -160,11 +162,11 @@ export function AppSidebar({
   return (
     (<Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+         <Sidebar_Logo/>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

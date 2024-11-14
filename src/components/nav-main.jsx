@@ -15,14 +15,14 @@ export function NavMain({ items }) {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>Navigation</SidebarGroupLabel>
       <SidebarMenu>
         {items.map(item => (
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton tooltip={item.title} asChild>
               <a
                 href={item.url}
-                className={`flex items-center ${currentPath === item.url ? 'bg-primary text-white hover:bg-primary hover:text-white' : ''}`}
+                className={`flex items-center ${currentPath === item.url ? 'bg-primary text-white font-semibold hover:bg-green-800 hover:text-white' : ''}`}
               >
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
