@@ -15,7 +15,7 @@ const Register = () => {
               className="h-full w-full rounded-xl object-cover"
             />
             <span className="absolute bottom-4 left-4 bg-gray-200 opacity-75 text-black px-3 py-1 rounded-full text-sm">
-              <a href="https://www.pexels.com/photo/low-angle-photography-of-gray-concrete-building-259950/" target="_blank" rel="noopener noreferrer">
+              <a href="https://unsplash.com/photos/men-sitting-in-front-of-their-laptop-computer-MChSQHxGZrQ" target="_blank" rel="noopener noreferrer">
                 Photo by Unplash
               </a>
             </span>

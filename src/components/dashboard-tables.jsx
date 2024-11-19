@@ -70,7 +70,7 @@ const DashboardTables = () => {
         <TabsContent value="all" className="mt-4">
         <div className='flex justify-between pb-2'>
             <h1 className=''>List of Trainee's</h1>
-            <a href="/dashboard/trainees" className='text-end text-primary'>view more</a>
+            <a href="/dashboard/coordinator/all-trainees" className='text-end text-primary'>view more</a>
           </div>
           <div className="rounded-lg border max-w-[100vw] overflow-x-auto">
             <Table className="min-w-[800px] bg-card">
@@ -98,7 +98,7 @@ const DashboardTables = () => {
                       </Avatar>
                     </TableCell>
                     <TableCell className="font-medium">{item.name}</TableCell>
-                    <TableCell className="hidden md:table-cell">{item.email}</TableCell>
+                    <TableCell>{item.email}</TableCell>
                     <TableCell>{item.studentId}</TableCell>
                     <TableCell className="hidden md:table-cell">{item.course}</TableCell>
                     <TableCell className="hidden md:table-cell">{item.year}</TableCell>

@@ -1,0 +1,64 @@
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './app/landingpage/home';
+import Dashboard from './app/dashboard/dashboard';
+import DashboardLayout from './app/dashboard/dashboardLayout';
+import AllTrainees from './app/dashboard/trainees/allTrainee';
+import Login from './app/auth/login/login';
+import Register from './app/auth/register/register';
+import { ThemeProvider } from "@/components/theme-provider"
+import Evaluation from './app/dashboard/evaluation/evaluationForm';
+import Documentation from './app/dashboard/documentation/documentation';
+import TraineeUploadDocs from './app/traineeDashboard/traineeUploadDocs/traineeUploadDocs';
+import { Toaster } from "@/components/ui/toaster"
+import TraineeDashboard from './app/traineeDashboard/traineeDashboard';
+
+function App() {
+  return (
+    <ThemeProvider>
+    <Router>
+      <Routes>
+        {/* No Authentication Needed Pages */}
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<h1>About</h1>} />
+        {/* end no auth */}
+        {/* Dashboard Pages */}
+        <Route
+          path="/dashboard/*"
+          element={
+            <DashboardLayout>
+              <Routes>
+                {/* Coordinator Pages */}
+                <Route path="/coordinator/" element={<Dashboard />} />
+                <Route path="/coordinator/all-trainees" element={<AllTrainees/>} />
+                <Route path="/docs" element={<Documentation/>} />
+                <Route path="/settings" element={<h1>Settings</h1>} />
+                <Route path="*" element={<h1>Not Found</h1>} />
+                {/* Evaluating Trainee */}
+                <Route path='/evaluate/:trainee_id' element={<Evaluation/>} />
+                {/* Trainee Pages */}
+                <Route path="/trainee/" element={<TraineeDashboard/>} />
+                <Route path="/trainee/documents" element={<TraineeUploadDocs/>} />
+                <Route path="/trainee/evaluation" element={<h1>Evaluate</h1>} />
+                {/* Supervisor */}
+                <Route path="/supervisor/" element={<Dashboard />} />
+                <Route path="/supervisor/trainees" element={<AllTrainees/>} />
+              </Routes>
+            </DashboardLayout>
+          }
+        />
+        {/* Authentication */}
+        <Route path='/login' element={<Login/>} />
+        <Route path='/register' element={<Register/>} />
+
+        {/* Error 404 */}
+        <Route path="*" element={<h1>Not Found</h1>} />
+      </Routes>
+      <Toaster/>
+    </Router>
+          
+    </ThemeProvider>
+  );
+}
+
+export default App;

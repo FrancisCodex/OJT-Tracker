@@ -88,7 +88,9 @@ export default function ListTable({ data }) {
             <FileText className="h-4 w-4 text-blue-500" />
           </Button>
           <Button variant="outline" size="icon">
+            <a href={'/dashboard/evaluate/'+trainee.id}>
             <ClipboardEdit className="h-4 w-4 text-green-500" />
+            </a>
           </Button>
         </div>
       </TableCell>

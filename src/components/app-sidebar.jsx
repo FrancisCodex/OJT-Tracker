@@ -1,177 +1,28 @@
-import * as React from "react"
-import {
-  AudioWaveform,
-  BookOpen,
-  Users,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  LayoutDashboard,
-} from 'lucide-react'
-
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import * as React from "react";
+import { NavMain } from "@/components/nav-main";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import OJT_Logo from '@/assets/images/Logo_icon.svg'
-import Sidebar_Logo from "./sidebar_logo"
+} from "@/components/ui/sidebar";
+import Sidebar_Logo from "./sidebar_logo";
 
-// This is sample data.
-const data = {
-  user: {
-     name: 'nyxb',
-     email: 'm@example.com',
-     avatar: '/avatars/nyxb.jpg',
-  },
-  teams: [
-     {
-        name: 'Acme Inc',
-        logo: GalleryVerticalEnd,
-        plan: 'Enterprise',
-     },
-     {
-        name: 'Acme Corp.',
-        logo: AudioWaveform,
-        plan: 'Startup',
-     },
-     {
-        name: 'Evil Corp.',
-        logo: Command,
-        plan: 'Free',
-     },
-  ],
-  navMain: [
-     {
-        title: 'Dashboard',
-        url: '/dashboard',
-        icon: LayoutDashboard,
-        isActive: true,
-        items: [
-           {
-              title: 'History',
-              url: '#',
-           },
-           {
-              title: 'Starred',
-              url: '#',
-           },
-           {
-              title: 'Settings',
-              url: '#',
-           },
-        ],
-     },
-     {
-        title: 'Trainees',
-        url: '/dashboard/trainees',
-        icon: Users,
-        items: [
-           {
-              title: 'Genesis',
-              url: '#',
-           },
-           {
-              title: 'Explorer',
-              url: '#',
-           },
-           {
-              title: 'Quantum',
-              url: '#',
-           },
-        ],
-     },
-     {
-        title: 'Documentation',
-        url: '/dashboard/docs',
-        icon: BookOpen,
-        items: [
-           {
-              title: 'Introduction',
-              url: '#',
-           },
-           {
-              title: 'Get Started',
-              url: '#',
-           },
-           {
-              title: 'Tutorials',
-              url: '#',
-           },
-           {
-              title: 'Changelog',
-              url: '#',
-           },
-        ],
-     },
-     {
-        title: 'Settings',
-        url: '/dashboard/settings',
-        icon: Settings2,
-        items: [
-           {
-              title: 'General',
-              url: '#',
-           },
-           {
-              title: 'Team',
-              url: '#',
-           },
-           {
-              title: 'Billing',
-              url: '#',
-           },
-           {
-              title: 'Limits',
-              url: '#',
-           },
-        ],
-     },
-  ],
-  projects: [
-     {
-        name: 'Design Engineering',
-        url: '#',
-        icon: Frame,
-     },
-     {
-        name: 'Sales & Marketing',
-        url: '#',
-        icon: PieChart,
-     },
-     {
-        name: 'Travel',
-        url: '#',
-        icon: Map,
-     },
-  ],
-}
-
-export function AppSidebar({
-  ...props
-}) {
+export function AppSidebar({ navLinks, user, ...props }) {
   return (
-    (<Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-         <Sidebar_Logo/>
+        <Sidebar_Logo />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
+        <NavMain items={navLinks} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
       <SidebarRail />
-    </Sidebar>)
+    </Sidebar>
   );
 }

@@ -31,11 +31,13 @@ const Evaluation = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between mb-4 ">
             {ratings.map((rating) => (
-              <div key={rating.value} className="text-center">
+              <div key={rating.value} className="text-center flex flex-col justify-between">
+                <div className='w-fit'>
                 <div className="font-semibold">{rating.value}</div>
                 <div className="text-sm text-muted-foreground">{rating.label}</div>
+                </div>
               </div>
             ))}
           </div>
