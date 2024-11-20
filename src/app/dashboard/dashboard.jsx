@@ -1,20 +1,12 @@
 import * as React from "react";
 import {
-  Bell,
-  Mail,
-  Moon,
-  Plus,
-  Search,
   Users,
-  UserPlus,
-  UserCheck,
-  SmilePlus,
-  ChevronDown,
+  BriefcaseBusiness,
+  CircleCheckBig,
   Download,
-  MoreHorizontal,
+  Building2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -25,9 +17,32 @@ import {
 } from "@/components/ui/select";
 import { DatePickerWithRange } from "@/components/date-range-picker";
 import DashboardTables from "@/components/dashboard-tables";
+import trainees from '@/constants/traineeData';
+import agencies from "@/constants/agenciesData";
+import DashboardCharts from "@/components/dashboard-charts";
 
 export default function Dashboard() {
   const [date, setDate] = React.useState({ from: null, to: null });
+
+  const totalTrainees = trainees.length;
+  const totalDeployed = trainees.filter(trainee => trainee.deployed).length;
+
+  const calculateOJTCompletionRate = () => {
+    const totalCompletion = trainees.reduce((acc, trainee) => {
+      const today = new Date();
+      const startDate = new Date(trainee.date_started_ojt);
+      const totalDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+      const totalWeeks = Math.floor(totalDays / 7);
+      const totalWorkingDays = totalWeeks * 5 + (totalDays % 7);
+      const totalWorkingHours = totalWorkingDays * 8;
+      const completionRate = (totalWorkingHours / trainee.required_hours) * 100;
+      return acc + Math.min(completionRate, 100); // Cap at 100%
+    }, 0);
+    return (totalCompletion / totalTrainees).toFixed(2);
+  };
+  const totalAgencies = agencies.length;
+
+  const ojtCompletionRate = calculateOJTCompletionRate();
 
   return (
     <div className="w-full flex-col box-border">
@@ -36,7 +51,7 @@ export default function Dashboard() {
           <div>
             <h1 className="text-2xl font-bold">Dashboard</h1>
             <p className="text-sm text-muted-foreground">
-            Here’s what happening with your trainee’s today
+              Here’s what happening with your trainee’s today
             </p>
           </div>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -44,12 +59,12 @@ export default function Dashboard() {
               <DatePickerWithRange date={date} setDate={setDate} />
             </div>
             <div className="flex gap-4">
-              <Select defaultValue="monthly">
+              <Select defaultValue="semester">
                 <SelectTrigger className="w-fit">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="semester">Semester</SelectItem>
                   <SelectItem value="yearly">Yearly</SelectItem>
                 </SelectContent>
               </Select>
@@ -58,9 +73,10 @@ export default function Dashboard() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Segments</SelectItem>
-                  <SelectItem value="tech">Tech</SelectItem>
-                  <SelectItem value="sales">Sales</SelectItem>
+                  <SelectItem value="all">All Courses</SelectItem>
+                  <SelectItem value="Information Technology">IT</SelectItem>
+                  <SelectItem value="Information Systems">IS</SelectItem>
+                  <SelectItem value="Computer Science">CS</SelectItem>
                 </SelectContent>
               </Select>
               <Button variant="outline">
@@ -78,7 +94,7 @@ export default function Dashboard() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">30</div>
+              <div className="text-2xl font-bold">{totalTrainees}</div>
               <p className="text-xs text-muted-foreground">
                 <span className="text-green-500">↑ 2%</span> From last quarter
               </p>
@@ -87,10 +103,10 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Total Deployed</CardTitle>
-              <UserPlus className="h-4 w-4 text-muted-foreground" />
+              <BriefcaseBusiness className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">30</div>
+              <div className="text-2xl font-bold">{totalDeployed}</div>
               <p className="text-xs text-muted-foreground">
                 <span className="text-green-500">↑ 12.3%</span> From last quarter
               </p>
@@ -98,38 +114,31 @@ export default function Dashboard() {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">New Hires</CardTitle>
-              <UserCheck className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">OJT Completion Rate</CardTitle>
+              <CircleCheckBig className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1,289</div>
-              <p className="text-xs text-muted-foreground">
-                <span className="text-green-500">↑ 2%</span> From last quarter
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Attendance Rate</CardTitle>
-              <SmilePlus className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">89.9%</div>
+              <div className="text-2xl font-bold">{ojtCompletionRate}%</div>
               <p className="text-xs text-muted-foreground">
                 <span className="text-green-500">↑ 1.2%</span> From last quarter
               </p>
             </CardContent>
           </Card>
+          <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Host Training Establishments</CardTitle>
+            <Building2 className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalAgencies}</div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-500">↑ 2%</span> From last quarter
+            </p>
+          </CardContent>
+          </Card>
         </div>
         <div className="grid gap-6 lg:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Trainee Performance</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[200px] w-full rounded-lg bg-muted/10" />
-            </CardContent>
-          </Card>
+          <DashboardCharts ojtCompletionRate={ojtCompletionRate} />
           <Card>
             <CardHeader>
               <CardTitle>Geography</CardTitle>
@@ -142,7 +151,6 @@ export default function Dashboard() {
         {/* Tables */}
         <DashboardTables />
       </div>
-          
     </div>
   );
 }

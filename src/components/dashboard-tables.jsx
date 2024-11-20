@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,47 +18,29 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import agencies from '@/constants/agenciesData'; // Update the path as needed
+import agencies from '@/constants/agenciesData';
+import trainees from '@/constants/traineeData';
 
 const DashboardTables = () => {
-  const dummyData = [
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      email: "sarah.j@example.com",
-      studentId: "2024-0001",
-      course: "BSIT",
-      year: 3,
-      deployed: true,
-      evaluated: "pending",
-      completed: false,
-      avatar: "/placeholder.svg?height=32&width=32",
-    },
-    {
-      id: 2,
-      name: "Michael Chen",
-      email: "m.chen@example.com",
-      studentId: "2024-0002",
-      course: "BSIT",
-      year: 4,
-      deployed: true,
-      evaluated: "completed",
-      completed: true,
-      avatar: "/placeholder.svg?height=32&width=32",
-    },
-    {
-      id: 3,
-      name: "Emma Davis",
-      email: "emma.d@example.com",
-      studentId: "2024-0003",
-      course: "BSIT",
-      year: 3,
-      deployed: false,
-      evaluated: "pending",
-      completed: false,
-      avatar: "/placeholder.svg?height=32&width=32",
-    },
-  ];
+  const [currentPage, setCurrentPage] = useState(1);
+  const traineesPerPage = 5;
+
+  // Calculate the current trainees to display
+  const indexOfLastTrainee = currentPage * traineesPerPage;
+  const indexOfFirstTrainee = indexOfLastTrainee - traineesPerPage;
+  const currentTrainees = trainees.slice(indexOfFirstTrainee, indexOfLastTrainee);
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(trainees.length / traineesPerPage);
+
+  // Handle pagination
+  const handlePreviousPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
 
   return (
     <div className="w-full box-border">
@@ -68,7 +50,7 @@ const DashboardTables = () => {
           <TabsTrigger value="agencies">List of Agencies</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="mt-4">
-        <div className='flex justify-between pb-2'>
+          <div className='flex justify-between pb-2'>
             <h1 className=''>List of Trainee's</h1>
             <a href="/dashboard/coordinator/all-trainees" className='text-end text-primary'>view more</a>
           </div>
@@ -76,7 +58,6 @@ const DashboardTables = () => {
             <Table className="min-w-[800px] bg-card">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-fit">Profile</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Student ID</TableHead>
@@ -89,14 +70,8 @@ const DashboardTables = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {dummyData.map((item) => (
+                {currentTrainees.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell>
-                      <Avatar className="w-8 h-8">
-                        <AvatarImage src={item.avatar} alt={item.name} />
-                        <AvatarFallback>{item.name[0]}</AvatarFallback>
-                      </Avatar>
-                    </TableCell>
                     <TableCell className="font-medium">{item.name}</TableCell>
                     <TableCell>{item.email}</TableCell>
                     <TableCell>{item.studentId}</TableCell>
@@ -108,8 +83,8 @@ const DashboardTables = () => {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={item.evaluated === "completed" ? "default" : "secondary"}>
-                        {item.evaluated.toUpperCase()}
+                      <Badge variant={item.evaluated ? "default" : "secondary"}>
+                        {item.evaluated ? "YES" : "NO"}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -123,7 +98,9 @@ const DashboardTables = () => {
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button variant="outline" size="icon">
-                                <FileText className="h-4 w-4 text-blue-500" />
+                              <a href={'/dashboard/coordinator/view-trainee/'+item.id}>
+                                <Eye className="h-4 w-4 text-blue-500" />
+                              </a>
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
@@ -133,7 +110,9 @@ const DashboardTables = () => {
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button variant="outline" size="icon">
+                              <a href={'/dashboard/coordinator/evaluate/'+item.id}>
                                 <ClipboardEdit className="h-4 w-4 text-green-500" />
+                              </a>
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
@@ -148,17 +127,17 @@ const DashboardTables = () => {
               </TableBody>
             </Table>
             <div className="flex items-center justify-end space-x-2 py-4 px-4 bg-card">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handlePreviousPage} disabled={currentPage === 1}>
                 Previous
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handleNextPage} disabled={currentPage === totalPages}>
                 Next
               </Button>
             </div>
           </div>
         </TabsContent>
         <TabsContent value="agencies" className="mt-4">
-        <div className='flex justify-between pb-2'>
+          <div className='flex justify-between pb-2'>
             <h1 className=''>List of Agencies</h1>
             <a href="/dashboard/agencies" className='text-end text-primary'>view more</a>
           </div>
@@ -186,7 +165,9 @@ const DashboardTables = () => {
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button variant="outline" size="icon">
+                              <a href={'/dashboard/coordinator/view-agency/'+agencies.id}>
                                 <Eye className="h-4 w-4 text-blue-500" />
+                              </a>
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>

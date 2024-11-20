@@ -132,6 +132,7 @@ const Register_Form = () => {
         <p className="text-balance text-muted-foreground">
           Enter your details to create an account
         </p>
+        <p className='text-sm'>(⚠️Note sign-up's are currently disabled proceed to <a href="/login" className='text-blue-600'>Login</a>)</p>
       </div>
 
       <div className="grid gap-2">

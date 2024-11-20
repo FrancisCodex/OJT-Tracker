@@ -8,6 +8,14 @@ import { Label } from "@/components/ui/label";
 import { Mail, LockKeyhole } from "lucide-react";
 import { useSupabaseAuth } from '@/hooks/useSupabaseAuth';
 import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import accountDetails from '@/constants/accountDetails';
 
 const Login = () => {
   const { signIn, loading, error, user } = useSupabaseAuth();
@@ -44,6 +52,12 @@ const Login = () => {
     }
   }, [loginError, user, toast, navigate]);
 
+  const handleAccountSelect = (value) => {
+    const account = accountDetails[value];
+    setEmail(account.email);
+    setPassword(account.password);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { error } = await signIn(email, password);
@@ -68,6 +82,20 @@ const Login = () => {
               </p>
             </div>
             <form onSubmit={handleSubmit} className="grid gap-2">
+              <div className="grid gap-2 border p-3">
+                <p classname='text-gray-500'>For testing Purposes only</p>
+                <Label htmlFor="accountType">Select Account Type</Label>
+                <Select onValueChange={handleAccountSelect}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select an account" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="trainee">Trainee Account</SelectItem>
+                    <SelectItem value="coordinator">Coordinator Account</SelectItem>
+                    <SelectItem value="supervisor">Supervisor Account</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input

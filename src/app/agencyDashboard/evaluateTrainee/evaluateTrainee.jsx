@@ -55,6 +55,7 @@ const SupervisorEvaluateTrainee = () => {
   }
 
   return (
+    <div className="w-full mx-auto py-10">
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Evaluation Form for {trainee.name}</CardTitle>
@@ -139,6 +140,7 @@ const SupervisorEvaluateTrainee = () => {
         </form>
       </CardContent>
     </Card>
+    </div>
   );
 }
 

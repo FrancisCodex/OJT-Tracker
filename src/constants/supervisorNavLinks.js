@@ -3,7 +3,7 @@ import { LayoutDashboard, Users, BookOpen, Settings2, ClipboardEdit } from 'luci
 const SupervisorNavLinks = [
   {
     title: 'Dashboard',
-    url: '/dashboard/coordinator',
+    url: '/dashboard/supervisor',
     icon: LayoutDashboard,
     isActive: true,
   },
@@ -11,6 +11,11 @@ const SupervisorNavLinks = [
     title: 'Trainees',
     url: '/dashboard/supervisor/all-trainees',
     icon: Users,
+  },
+  {
+    title: 'Evaluation',
+    url: '/dashboard/supervisor/evaluate',
+    icon: ClipboardEdit,
   },
   {
     title: 'Documentation',
@@ -21,11 +26,6 @@ const SupervisorNavLinks = [
     title: 'Settings',
     url: '/dashboard/settings',
     icon: Settings2,
-  },
-  {
-    title: 'Evaluation',
-    url: '/dashboard/supervisor/evaluate',
-    icon: ClipboardEdit,
   }
 ];
 

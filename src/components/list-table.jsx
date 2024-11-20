@@ -85,10 +85,12 @@ export default function ListTable({ data }) {
       <TableCell>
         <div className="flex gap-2">
         <Button variant="outline" size="icon">
+            <a href={'/dashboard/coordinator/view-trainee/'+trainee.id}>
             <FileText className="h-4 w-4 text-blue-500" />
+            </a>
           </Button>
           <Button variant="outline" size="icon">
-            <a href={'/dashboard/evaluate/'+trainee.id}>
+            <a href={'/dashboard/coordinator/evaluate/'+trainee.id}>
             <ClipboardEdit className="h-4 w-4 text-green-500" />
             </a>
           </Button>

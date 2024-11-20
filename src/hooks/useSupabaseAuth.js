@@ -48,7 +48,7 @@ export const useSupabaseAuth = () => {
             first_name: firstName,
             last_name: lastName,
             birthday: null,
-            role: 'supervisor',
+            role: 'trainee',
           }
         }
       });

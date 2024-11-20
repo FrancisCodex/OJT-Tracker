@@ -5,7 +5,7 @@ const agencies = [
       representative_name: "Rick Grimes",
       representative_email: "rickgrimes@metoo.com",
       company_address: "Faker Street 1",
-      num_trainees: 1,
+      num_trainees: null,
     },
     {
       id: 2,
@@ -13,7 +13,7 @@ const agencies = [
       representative_name: "John Doe",
       representative_email: "johndoe@techinnovators.com",
       company_address: "123 Tech Avenue",
-      num_trainees: 2,
+      num_trainees: null,
     },
     {
       id: 3,
@@ -21,7 +21,7 @@ const agencies = [
       representative_name: "Jane Smith",
       representative_email: "janesmith@creativesolutions.com",
       company_address: "456 Creative Blvd",
-      num_trainees: 3,
+      num_trainees: null,
     },
     {
       id: 4,
@@ -29,7 +29,7 @@ const agencies = [
       representative_name: "Michael Johnson",
       representative_email: "michaeljohnson@globalenterprises.com",
       company_address: "789 Global Road",
-      num_trainees: 4,
+      num_trainees: null,
     },
     {
       id: 5,
@@ -37,7 +37,7 @@ const agencies = [
       representative_name: "Emily Davis",
       representative_email: "emilydavis@innovativedesigns.com",
       company_address: "101 Design Street",
-      num_trainees: 7,
+      num_trainees: null,
     },
   ];
   

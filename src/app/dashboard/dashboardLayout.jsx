@@ -12,6 +12,7 @@ import TraineeNavLinks from '@/constants/traineeNavLinks';
 import SupervisorNavLinks from '@/constants/supervisorNavLinks';
 import { useSupabaseAuth } from '@/hooks/useSupabaseAuth';
 import { Loading } from '@/components/loading';
+import Footer from '@/components/footer';
 
 export default function DashboardLayout({ children }) {
   const { user, loading } = useSupabaseAuth();
@@ -45,6 +46,7 @@ export default function DashboardLayout({ children }) {
         <div className="overflow-y-auto pt-10 md:pt-0 bg-zinc-50 dark:bg-background h-full">
           {children}
         </div>
+        <Footer />
       </SidebarInset>
     </SidebarProvider>
   );

@@ -13,14 +13,14 @@ const TraineeNavLinks = [
     icon: Users,
   },
   {
-    title: 'Documentation',
-    url: '/docs',
-    icon: BookOpen,
-  },
-  {
     title: 'Evaluate',
     url: '/dashboard/trainee/evaluate',
     icon: ClipboardEdit,
+  },
+  {
+    title: 'Documentation',
+    url: '/docs',
+    icon: BookOpen,
   },
   {
     title: 'Settings',

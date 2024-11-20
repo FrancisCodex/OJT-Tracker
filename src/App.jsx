@@ -15,6 +15,11 @@ import PublicLayout from '@/layout/publicRoute';
 import { Toaster } from "@/components/ui/toaster";
 import TraineeDashboard from './app/traineeDashboard/traineeDashboard';
 import SupervisorEvaluateTrainee from '@/app/agencyDashboard/evaluateTrainee/evaluateTrainee';
+import TraineeProfile from '@/app/dashboard/traineeProfile/traineeProfile';
+import AgencyProfile from '@/app/dashboard/agencyProfile/agencyProfile';
+import AgencyDashboard from '@/app/agencyDashboard/hteDashboard';
+import TraineeEvaluate from '@/app/traineeDashboard/traineeEvaluation/traineeEvaluation';
+
 
 function App() {
   return (
@@ -39,18 +44,20 @@ function App() {
                   <Route path="/coordinator" element={<PrivateRoute requiredRole="coordinator" component={Dashboard} />} />
                   <Route path="/coordinator/all-trainees" element={<PrivateRoute requiredRole="coordinator" component={AllTrainees} />} />
                   <Route path="/docs" element={<PrivateRoute requiredRole="coordinator" component={Documentation} />} />
-                  <Route path="/settings" element={<PrivateRoute requiredRole="coordinator" component={() => <h1>Settings</h1>} />} />
+                  <Route path="/settings" element={<PrivateRoute requiredRole="coordinator" component={() => <h1 className='text-center'>Work in Progress ⚒️</h1>} />} />
+                  <Route path="/coordinator/view-trainee/:trainee_id" element={<PrivateRoute requiredRole="coordinator" component={TraineeProfile}/>}/>
+                  <Route path="/coordinator/view-company/:company_id" element={<PrivateRoute requiredRole="coordinator" component={AgencyProfile} />} />
+                  <Route path="/coordinator/evaluate/:trainee_id" element={<PrivateRoute requiredRole="coordinator" component={Evaluation} />} />
                   <Route path="*" element={<h1>Not Found</h1>} />
-                  {/* Evaluating Trainee */}
-                  <Route path="/evaluate/:trainee_id" element={<PrivateRoute requiredRole="coordinator" component={Evaluation} />} />
+                 
                   {/* Trainee Pages */}
                   <Route path="/trainee" element={<PrivateRoute requiredRole="trainee" component={TraineeDashboard} />} />
                   <Route path="/trainee/documents" element={<PrivateRoute requiredRole="trainee" component={TraineeUploadDocs} />} />
-                  <Route path="/trainee/evaluation" element={<PrivateRoute requiredRole="trainee" component={() => <h1>Evaluate</h1>} />} />
+                  <Route path="/trainee/evaluate" element={<PrivateRoute requiredRole="trainee" component={TraineeEvaluate} />} />
                   {/* Supervisor */}
-                  <Route path="/supervisor" element={<PrivateRoute requiredRole="supervisor" component={Dashboard} />} />
-                  <Route path="/supervisor/trainees" element={<PrivateRoute requiredRole="supervisor" component={AllTrainees} />} />
-                  <Route path="/supervisor/evaluate" element={<PrivateRoute requiredRole="supervisor" component={() => <h1>Evaluate</h1>} />} />
+                  <Route path="/supervisor" element={<PrivateRoute requiredRole="supervisor" component={AgencyDashboard} />} />
+                  <Route path="/supervisor/all-trainees" element={<PrivateRoute requiredRole="supervisor" component={() => <h1 className='text-center'>Work in Progress ⚒️</h1>} />} />
+                  <Route path="/supervisor/evaluate" element={<PrivateRoute requiredRole="supervisor" component={() => <h1 className='text-center'>Work in Progress ⚒️</h1>} />} />
                   <Route path="/supervisor/evaluate/:trainee_id" element={<PrivateRoute requiredRole="supervisor" component={SupervisorEvaluateTrainee} />} />
                 </Routes>
               </DashboardLayout>
