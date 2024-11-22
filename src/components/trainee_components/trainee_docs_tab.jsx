@@ -3,17 +3,18 @@ import { Eye, Download, Upload, Trash } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useDocumentUpload } from '@/hooks/trainee/useDocumentUpload';
+import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
 
 const initialDocuments = [
-  { id: 1, name: 'Student Internship Contract', fileName: null, status: 'Missing', fileUrl: null },
+  { id: 1, name: 'Student Internship Contract - MOA', fileName: null, status: 'Missing', fileUrl: null },
   { id: 2, name: 'Internship Work Plan', fileName: null, status: 'Missing', fileUrl: null },
   { id: 3, name: 'Parents Consent', fileName: null, status: 'Missing', fileUrl: null },
   { id: 4, name: 'Medical Certificate', fileName: null, status: 'Missing', fileUrl: null },
@@ -23,28 +24,20 @@ const initialDocuments = [
   { id: 8, name: 'Student History Statement', fileName: null, status: 'Missing', fileUrl: null },
 ];
 
-const TraineeDocsTab = ({ lastName }) => {
+const TraineeDocsTab = () => {
   const [documents, setDocuments] = useState(initialDocuments);
-  const { uploadDocument, loading, error } = useDocumentUpload();
+  const { toast } = useToast();
 
-  const handleFileUpload = (documentId) => async (event) => {
+  const handleFileUpload = (documentId) => (event) => {
     const file = event.target.files?.[0];
     if (file) {
-      const document = documents.find(doc => doc.id === documentId);
-      const newFileName = `${document.name.replace(/ /g, '_')}_${lastName}${file.name.substring(file.name.lastIndexOf('.'))}`;
-      const renamedFile = new File([file], newFileName, { type: file.type });
-
-      const fileUrl = await uploadDocument(documentId, renamedFile, newFileName);
-
-      if (fileUrl) {
-        setDocuments((prevDocuments) =>
-          prevDocuments.map((doc) =>
-            doc.id === documentId
-              ? { ...doc, fileName: renamedFile.name, status: 'Submitted', fileUrl }
-              : doc
-          )
-        );
-      }
+      setDocuments((prevDocuments) =>
+        prevDocuments.map((doc) =>
+          doc.id === documentId
+            ? { ...doc, fileName: file.name, status: 'Submitted', fileUrl: URL.createObjectURL(file) }
+            : doc
+        )
+      );
     }
   };
 
@@ -64,8 +57,13 @@ const TraineeDocsTab = ({ lastName }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Handle form submission to upload files to Supabase storage
     console.log('Form submitted', documents);
+
+    toast({
+      title: "Documents Submitted",
+      description: "Your documents have been successfully submitted.",
+      duration: 3000,
+    });
   };
 
   return (
@@ -74,8 +72,8 @@ const TraineeDocsTab = ({ lastName }) => {
         <TabsTrigger value="documents" className="font-medium">
           Documents
         </TabsTrigger>
-        <TabsTrigger value="weekly" className="font-medium">
-          Weekly Reports
+        <TabsTrigger value="narrative" className="font-medium">
+          Narrative Report
         </TabsTrigger>
       </TabsList>
       <TabsContent value="documents" className="mt-4 w-full">
@@ -95,9 +93,9 @@ const TraineeDocsTab = ({ lastName }) => {
                   {documents.map((doc) => (
                     <div
                       key={doc.id}
-                      className="grid grid-cols-3 justify-items-stretch border-b pb-4"
+                      className="grid grid-cols-3 items-center justify-between space-x-3 border-b pb-4"
                     >
-                      <div className="flex items-center text-wrap">
+                      <div className="flex items-center space-x-4">
                         <span className="text-sm font-medium">
                           {doc.id}. {doc.name}
                         </span>
@@ -113,7 +111,7 @@ const TraineeDocsTab = ({ lastName }) => {
                       <div className="flex items-center space-x-2 justify-end">
                         {doc.status === 'Submitted' ? (
                           <>
-                            <Badge variant="secondary" className="font-mono max-w-[150px] truncate hidden md:block">
+                            <Badge variant="secondary" className="font-mono max-w-[150px] truncate">
                               {doc.fileName}
                             </Badge>
                             <TooltipProvider>
@@ -174,7 +172,10 @@ const TraineeDocsTab = ({ lastName }) => {
                                   <Button
                                     variant="default"
                                     className="h-8"
-                                    onClick={() => document.getElementById(`file-${doc.id}`)?.click()}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      document.getElementById(`file-${doc.id}`)?.click();
+                                    }}
                                   >
                                     <Upload className="h-4 w-4" />
                                     <span className='hidden md:block'>Upload File</span>
@@ -185,7 +186,7 @@ const TraineeDocsTab = ({ lastName }) => {
                                 </TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
-                            <input
+                            <Input
                               type="file"
                               id={`file-${doc.id}`}
                               className="hidden"
@@ -199,18 +200,17 @@ const TraineeDocsTab = ({ lastName }) => {
                   ))}
                 </div>
                 <div className='flex justify-center items-center md:justify-end'>
-                  <Button type="submit" className="mt-4" disabled={loading}>
-                    {loading ? "Submitting..." : "Submit Documents"}
+                  <Button type="submit" className="mt-4">
+                    Submit Documents
                   </Button>
-                  {error && <p className="text-sm text-red-500">{error.message}</p>}
                 </div>
               </div>
             </form>
           </CardContent>
         </Card>
       </TabsContent>
-      <TabsContent value="weekly" className="mt-4">
-        <h1>Weekly</h1>
+      <TabsContent value="narrative" className="mt-4">
+        <h1>⚒️Still Working On this part</h1>
       </TabsContent>
     </Tabs>
   );

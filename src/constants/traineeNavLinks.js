@@ -14,7 +14,7 @@ const TraineeNavLinks = [
   },
   {
     title: 'Evaluate',
-    url: '/dashboard/trainee/evaluate',
+    url: '/dashboard/trainee/feedback',
     icon: ClipboardEdit,
   },
   {

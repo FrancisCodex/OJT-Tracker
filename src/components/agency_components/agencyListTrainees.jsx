@@ -5,10 +5,10 @@ import {
   ChevronLeft,
   ChevronRight,
   ClipboardEdit,
-  FileText,
   Filter,
   Search,
   ChevronDown,
+  Eye,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
-export default function ListTable({ data }) {
+export default function AgencyTraineeList({ data }) {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(6);
@@ -62,12 +62,12 @@ export default function ListTable({ data }) {
       <TableCell>
         <div className="flex gap-2">
         <Button variant="outline" size="icon">
-            <a href={'/dashboard/coordinator/view-trainee/'+trainee.id}>
-            <FileText className="h-4 w-4 text-blue-500" />
+            <a href={'/dashboard/supervisor/view-trainee/'+trainee.id}>
+            <Eye className="h-4 w-4 text-blue-500" />
             </a>
           </Button>
           <Button variant="outline" size="icon">
-            <a href={'/dashboard/coordinator/evaluate/'+trainee.id}>
+            <a href={'/dashboard/supervisor/evaluate/'+trainee.id}>
             <ClipboardEdit className="h-4 w-4 text-green-500" />
             </a>
           </Button>

@@ -84,10 +84,10 @@ const Navbar = () => {
             About
           </Link>
           <Link
-            to="/services"
+            to="/docs"
             className="text-black hover:text-primary dark:text-gray-400 dark:hover:text-gray-50"
           >
-            Services
+            Documentation
           </Link>
           <Link
             to="/contact"

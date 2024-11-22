@@ -38,6 +38,33 @@ const SupervisorEvaluateTrainee = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Validate that all questions are answered
+    for (const [category, items] of Object.entries(questions)) {
+      for (let i = 0; i < items.length; i++) {
+        if (!evaluation[category] || !evaluation[category][i]) {
+          toast({
+            title: "Error",
+            description: `Please answer all questions in the ${category} section.`,
+            variant: "destructive",
+            duration: 3000,
+          });
+          return;
+        }
+      }
+    }
+
+    // Validate that strengths, weaknesses, and comments are not empty
+    if (!strengths || !weaknesses || !comments) {
+      toast({
+        title: "Error",
+        description: "Please fill in the Strengths, Weaknesses, and Comments/Suggestions sections.",
+        variant: "destructive",
+        duration: 3000,
+      });
+      return;
+    }
+
     console.log('Evaluation:', evaluation);
     console.log('Strengths:', strengths);
     console.log('Weaknesses:', weaknesses);
@@ -76,7 +103,7 @@ const SupervisorEvaluateTrainee = () => {
 
             {Object.entries(questions).map(([category, items]) => (
               <div key={category} className="space-y-4">
-                <h3 className="text-lg font-semibold bg-green-500 text-white p-2 rounded">{category}</h3>
+                <h3 className="text-lg font-semibold bg-primary text-white p-2 rounded">{category} <span className='text-red-500'>*</span></h3>
                 {items.map((question, index) => (
                   <div key={index} className="grid grid-cols-[1fr,auto] gap-4 items-center">
                     <Label htmlFor={`${category}-${index}`} className="text-sm">
@@ -106,30 +133,30 @@ const SupervisorEvaluateTrainee = () => {
             ))}
 
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold bg-green-500 text-white p-2 rounded">STRENGTHS</h3>
+              <h3 className="text-lg font-semibold bg-primary text-white p-2 rounded">STRENGTHS <span className='text-red-500'>*</span></h3>
               <Textarea
                 placeholder="Write any comments, general impressions & observation regarding the capabilities and the skills of the trainee"
-                className="min-h-[100px]"
+                className="min-h-[100px] max-h-[200px]"
                 value={strengths}
                 onChange={(e) => setStrengths(e.target.value)}
               />
               <p className="text-sm text-muted-foreground">Maximum of 1000 characters only</p>
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold bg-green-500 text-white p-2 rounded">WEAKNESSES</h3>
+              <h3 className="text-lg font-semibold bg-primary text-white p-2 rounded">WEAKNESSES <span className='text-red-500'>*</span></h3>
               <Textarea
                 placeholder="Write any comments, general impressions & observation regarding the capabilities and the skills of the trainee"
-                className="min-h-[100px]"
+                className="min-h-[100px] max-h-[200px]"
                 value={weaknesses}
                 onChange={(e) => setWeaknesses(e.target.value)}
               />
               <p className="text-sm text-muted-foreground">Maximum of 1000 characters only</p>
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold bg-green-500 text-white p-2 rounded">COMMENTS/SUGGESTIONS</h3>
+              <h3 className="text-lg font-semibold bg-primary text-white p-2 rounded">COMMENTS/SUGGESTIONS <span className='text-red-500'>*</span></h3>
               <Textarea
                 placeholder="Write any comments, general impressions & observation regarding the capabilities and the skills of the trainee"
-                className="min-h-[100px]"
+                className="min-h-[100px] max-h-[200px]"
                 value={comments}
                 onChange={(e) => setComments(e.target.value)}
               />

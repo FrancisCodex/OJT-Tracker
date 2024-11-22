@@ -1,14 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ChevronFirst,
   ChevronLast,
   ChevronLeft,
   ChevronRight,
-  ClipboardEdit,
-  FileText,
-  Filter,
-  Search,
   ChevronDown,
+  Search,
+  Filter,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -28,13 +27,45 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 
-export default function ListTable({ data }) {
+export default function EvaluationListTable({ data }) {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+  const [filterConfig, setFilterConfig] = useState({
+    evaluated: null,
+    completed: null,
+    course: null,
+  });
+  const navigate = useNavigate();
+
+  const getInitials = (name) => {
+    const namesArray = name.split(" ");
+    if (namesArray.length === 1) return namesArray[0].charAt(0).toUpperCase();
+    return namesArray[0].charAt(0).toUpperCase() + namesArray[1].charAt(0).toUpperCase();
+  };
+
+  const UserAvatar = ({ trainee }) => (
+    <Avatar>
+      <AvatarImage src={trainee.avatar} alt={trainee.name} />
+      <AvatarFallback>{getInitials(trainee.name)}</AvatarFallback>
+    </Avatar>
+  );
 
   const TableContent = ({ trainee }) => (
     <>
@@ -42,12 +73,6 @@ export default function ListTable({ data }) {
       <TableCell className="">{trainee.email}</TableCell>
       <TableCell>{trainee.studentId}</TableCell>
       <TableCell className="">{trainee.course}</TableCell>
-      <TableCell className="">{trainee.year}</TableCell>
-      <TableCell>
-        <Badge variant={trainee.deployed ? "default" : "destructive"}>
-          {trainee.deployed ? "YES" : "NO"}
-        </Badge>
-      </TableCell>
       <TableCell className="table-cell">
         <Badge variant={trainee.evaluated ? "default" : "secondary"}>
           {trainee.evaluated ? "Completed" : "Pending"}
@@ -59,17 +84,12 @@ export default function ListTable({ data }) {
         </Badge>
       </TableCell>
 
-      <TableCell>
+      <TableCell className='w-fit'>
         <div className="flex gap-2">
-        <Button variant="outline" size="icon">
-            <a href={'/dashboard/coordinator/view-trainee/'+trainee.id}>
-            <FileText className="h-4 w-4 text-blue-500" />
-            </a>
-          </Button>
-          <Button variant="outline" size="icon">
-            <a href={'/dashboard/coordinator/evaluate/'+trainee.id}>
-            <ClipboardEdit className="h-4 w-4 text-green-500" />
-            </a>
+          <Button
+            onClick={() => navigate(`/dashboard/coordinator/evaluate/${trainee.id}`)}
+          >
+            Evaluate
           </Button>
         </div>
       </TableCell>
@@ -94,13 +114,28 @@ export default function ListTable({ data }) {
     return 0;
   });
 
-  // Filter trainees based on search
-  const filteredTrainees = sortedTrainees.filter(
-    (trainee) =>
+  // Filter trainees based on search and filterConfig
+  const filteredTrainees = sortedTrainees.filter((trainee) => {
+    const matchesSearch =
       trainee.name.toLowerCase().includes(search.toLowerCase()) ||
       trainee.email.toLowerCase().includes(search.toLowerCase()) ||
-      trainee.studentId.includes(search)
-  );
+      trainee.studentId.includes(search);
+
+    const matchesEvaluated =
+      filterConfig.evaluated === null ||
+      (filterConfig.evaluated === "evaluated" && trainee.evaluated) ||
+      (filterConfig.evaluated === "notEvaluated" && !trainee.evaluated);
+
+    const matchesCompleted =
+      filterConfig.completed === null ||
+      (filterConfig.completed === "completed" && trainee.completed) ||
+      (filterConfig.completed === "notCompleted" && !trainee.completed);
+
+    const matchesCourse =
+      filterConfig.course === null || trainee.course === filterConfig.course;
+
+    return matchesSearch && matchesEvaluated && matchesCompleted && matchesCourse;
+  });
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredTrainees.length / rowsPerPage);
@@ -120,10 +155,89 @@ export default function ListTable({ data }) {
             className="pl-8"
           />
         </div>
-        <Button variant="outline">
-          <Filter className="h-4 w-4 mr-2" />
-          Filter
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              <Filter className="h-4 w-4 mr-2" />
+              Filter
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-full"> {/* Adjust the width and height here */}
+            <DropdownMenuLabel>Filter Options</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <div className="grid grid-cols-3 divide-x divide-gray-200">
+                <div className="px-2">
+                    <DropdownMenuLabel>Evaluated</DropdownMenuLabel>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.evaluated === null}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, evaluated: null })}
+                    >
+                    All
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.evaluated === "evaluated"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, evaluated: "evaluated" })}
+                    >
+                    Evaluated
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.evaluated === "notEvaluated"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, evaluated: "notEvaluated" })}
+                    >
+                    Not Evaluated
+                    </DropdownMenuCheckboxItem>
+                </div>
+                <div className="px-2">
+                    <DropdownMenuLabel>Completed</DropdownMenuLabel>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.completed === null}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, completed: null })}
+                    >
+                    All
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.completed === "completed"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, completed: "completed" })}
+                    >
+                    Completed
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.completed === "notCompleted"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, completed: "notCompleted" })}
+                    >
+                    Not Completed
+                    </DropdownMenuCheckboxItem>
+                </div>
+                <div className="px-2">
+                    <DropdownMenuLabel>Course</DropdownMenuLabel>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.course === null}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, course: null })}
+                    >
+                    All
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.course === "BSIT"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, course: "BSIT" })}
+                    >
+                    BSIT
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.course === "BSIS"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, course: "BSIS" })}
+                    >
+                    BSIS
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.course === "BSCS"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, course: "BSCS" })}
+                    >
+                    BSCS
+                    </DropdownMenuCheckboxItem>
+                </div>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="border rounded-lg overflow-x-auto max-w-[100vw]">
@@ -175,28 +289,6 @@ export default function ListTable({ data }) {
                 />
                 </div>
                 
-              </TableHead>
-              <TableHead>
-                <div className="flex items-center">
-                YEAR
-                <ChevronDown
-                  className={`ml-2 h-4 w-4 cursor-pointer transition-transform ${
-                    sortConfig.key === 'year' && sortConfig.direction === 'ascending' ? 'rotate-180' : ''
-                  }`}
-                  onClick={() => handleSort('year')}
-                />
-                </div>
-              </TableHead>
-              <TableHead>
-                <div className="flex items-center">
-                DEPLOYED
-                <ChevronDown
-                  className={`ml-2 h-4 w-4 cursor-pointer transition-transform ${
-                    sortConfig.key === 'deployed' && sortConfig.direction === 'ascending' ? 'rotate-180' : ''
-                  }`}
-                  onClick={() => handleSort('deployed')}
-                />    
-                </div>
               </TableHead>
               <TableHead>
                 <div className="flex items-center">
