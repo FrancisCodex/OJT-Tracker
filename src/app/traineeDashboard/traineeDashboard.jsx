@@ -4,14 +4,39 @@ import {
   CalendarClock,
   SmilePlus,
   Clock,
+  Eye,
+  Download,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import trainees from "@/constants/traineeData";
 import agencies from "@/constants/agenciesData";
+import traineeSubmissions from '@/constants/traineeSubmissions';
+import { Calendar } from "@/components/ui/calendar";
+import { useNavigate } from "react-router-dom";
 
 const TraineeDashboard = () => {
   const myTraineeID = 1;
+  const navigate = useNavigate();
 
   // Fetch the trainee data based on the trainee_id
   const trainee = trainees.find(t => t.id === myTraineeID);
@@ -19,7 +44,10 @@ const TraineeDashboard = () => {
   // Fetch the company data based on the company_id
   const company = agencies.find(a => a.id === trainee.company_id);
 
-  // Calculate OJT completion rate and hours completed
+  // Fetch the submissions data based on the trainee_id
+  const submissions = traineeSubmissions.find(s => s.id === myTraineeID)?.submissions || [];
+
+  // Calculate the OJT completion rate
   const calculateOJTCompletionRate = () => {
     const today = new Date();
     const startDate = new Date(trainee.date_started_ojt);
@@ -35,6 +63,19 @@ const TraineeDashboard = () => {
   };
 
   const { completionRate, totalWorkingHours } = calculateOJTCompletionRate();
+
+  // Calculate expected date to finish OJT
+  const calculateExpectedFinishDate = () => {
+    const startDate = new Date(trainee.date_started_ojt);
+    const requiredDays = Math.ceil(trainee.required_hours / 8); // Assuming 8 hours per day
+    const totalWeeks = Math.floor(requiredDays / 5);
+    const remainingDays = requiredDays % 5;
+    const expectedFinishDate = new Date(startDate);
+    expectedFinishDate.setDate(startDate.getDate() + (totalWeeks * 7) + remainingDays);
+    return expectedFinishDate;
+  };
+
+  const expectedFinishDate = calculateExpectedFinishDate();
 
   return (
     <div className="w-full flex-col box-border">
@@ -84,6 +125,89 @@ const TraineeDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{totalWorkingHours} hours</div>
+              <div className="flex justify-between">
+              <div className="text-sm text-muted-foreground">
+                  Expected Date:
+              </div>
+              <div className="text-sm font-semibold">{expectedFinishDate.toDateString()}</div>
+              </div>   
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1">
+          {/* Show the documents the users has to submit and submitted */}
+          <Card>
+            <CardHeader className="items-center">
+              <CardTitle>Documents need to submit</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-lg border max-w-[100vw] overflow-x-auto">
+                <Table className="min-w-[500px] bg-card">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Document</TableHead>
+                      <TableHead>Submitted</TableHead>
+                      <TableHead>File Name</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {submissions.map((submission, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{submission.document}</TableCell>
+                        <TableCell>
+                          <Badge variant={submission.submitted ? "default" : "destructive"}>
+                            {submission.submitted ? 'Yes' : 'No'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {submission.submitted ? (
+                            <Badge variant="default">{submission.file_name || 'N/A'}</Badge>
+                          ) : (
+                            <Badge variant="secondary" className="font-mono w-fit hidden md:block">
+                              -
+                            </Badge>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {submission.submitted ? (
+                            <div className="flex space-x-2">
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button variant="outline" size="icon">
+                                      <Eye className="h-4 w-4 text-blue-500" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>View</TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button variant="outline" size="icon">
+                                      <Download className="h-4 w-4 text-primary" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>Download</TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            </div>
+                          ) : (
+                            <Button
+                              size="sm"
+                              onClick={() => navigate("/dashboard/trainee/documents")}
+                            >
+                              Submit
+                            </Button>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </CardContent>
           </Card>
         </div>

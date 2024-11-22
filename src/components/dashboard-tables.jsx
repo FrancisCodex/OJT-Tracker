@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +32,11 @@ const DashboardTables = () => {
   // Calculate the total number of pages
   const totalPages = Math.ceil(trainees.length / traineesPerPage);
 
+  const agencyTraineeCount = agencies.map(agency => ({
+    ...agency,
+    traineeCount: trainees.filter(trainee => trainee.company_id === agency.id).length,
+  }));
+
   // Handle pagination
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -41,6 +45,8 @@ const DashboardTables = () => {
   const handleNextPage = () => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
   };
+
+  console.log("Agencies", agencies.id);
 
   return (
     <div className="w-full box-border">
@@ -158,14 +164,14 @@ const DashboardTables = () => {
                     <TableCell className="font-medium">{agency.company_name}</TableCell>
                     <TableCell>{agency.representative_name}</TableCell>
                     <TableCell>{agency.representative_email}</TableCell>
-                    <TableCell>{agency.num_trainees}</TableCell>
+                    <TableCell>{agencyTraineeCount.traineeCount}</TableCell>
                     <TableCell>
                       <div className="flex gap-1">
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button variant="outline" size="icon">
-                              <a href={'/dashboard/coordinator/view-agency/'+agencies.id}>
+                              <a href={'/dashboard/coordinator/view-company/'+ agency.id}>
                                 <Eye className="h-4 w-4 text-blue-500" />
                               </a>
                               </Button>

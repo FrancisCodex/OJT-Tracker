@@ -1,3 +1,4 @@
+// This is evaluation form is for the Supervisor this will be used to evaluate their trainee
 const questions = {
     "QUALITY OF WORK": [
       "Accuracy of the completed work",

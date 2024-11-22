@@ -97,7 +97,7 @@ const Home = () => {
               </p>
             </div>
             <div className="mx-auto w-fit max-w-sm space-y-2">
-              <Button className="w-full" onClick={() => navigate('/dashboard')}>Start Project</Button>
+              <Button className="w-full" onClick={() => navigate('/login')}>Start Project</Button>
             </div>
           </div>
         </section>

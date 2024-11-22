@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { Moon, Bell, Search, Mail } from 'lucide-react';
+import { Bell, Search, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from "./ui/theme-toggle";
 

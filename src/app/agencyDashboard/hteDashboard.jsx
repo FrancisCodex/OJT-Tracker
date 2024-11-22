@@ -10,10 +10,19 @@ import agencies from "@/constants/agenciesData";
 import trainees from "@/constants/traineeData";
 import { Progress } from "@/components/ui/progress";
 import AgencyDashboardTable from "@/components/agency_components/agencyDashboardTable";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const AgencyDashboard = () => {
-  const ourCompanyID = 3;
-  const company_name = agencies.find(agency => agency.id === ourCompanyID).company_name;
+  const [ourCompanyID, setOurCompanyID] = React.useState(3);
+
+  const company = agencies.find(agency => agency.id === ourCompanyID);
+  const company_name = company.company_name;
 
   // Filter trainees for our company
   const companyTrainees = trainees.filter(trainee => trainee.company_id === ourCompanyID);
@@ -44,13 +53,29 @@ const AgencyDashboard = () => {
   return (
     <div className="w-full flex-col box-border">
       <div className="flex-1 space-y-6 p-6">
-        <div className="flex flex-col gap-4 md:flex-row-1 md:items-start md:justify-between">
+        <div className="flex flex-row gap-4 md:flex-row-1 md:items-start md:justify-between">
           <div>
             <h1 className="text-2xl font-bold">Agency Dashboard</h1>
             <p className="text-sm text-muted-foreground">
               Here’s what happening with your Trainee's Today!
             </p>
           </div>
+          {/* Add a select Button here to Change Company ID for Testing Purposes */}
+          <Select
+            value={ourCompanyID.toString()}
+            onValueChange={(value) => setOurCompanyID(parseInt(value))}
+          >
+            <SelectTrigger className="w-48">
+              <SelectValue placeholder="Select Company" />
+            </SelectTrigger>
+            <SelectContent>
+              {agencies.map((agency) => (
+                <SelectItem key={agency.id} value={agency.id.toString()}>
+                  {agency.company_name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         {/* cards */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -99,7 +124,6 @@ const AgencyDashboard = () => {
           </div>
           <AgencyDashboardTable companyID={ourCompanyID} />
         </div>
-        
       </div>
     </div>
   );

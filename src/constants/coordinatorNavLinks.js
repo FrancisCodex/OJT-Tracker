@@ -13,6 +13,11 @@ const CoordinatorNavLinks = [
     icon: Users,
   },
   {
+    title: 'Evaluation',
+    url: '/dashboard/coordinator/evaluations',
+    icon: ClipboardEdit,
+  },
+  {
     title: 'Documentation',
     url: '/dashboard/docs',
     icon: BookOpen,
@@ -21,11 +26,6 @@ const CoordinatorNavLinks = [
     title: 'Settings',
     url: '/dashboard/settings',
     icon: Settings2,
-  },
-  {
-    title: 'Evaluation',
-    url: '/dashboard/coordinator/evaluation',
-    icon: ClipboardEdit,
   }
 ];
 

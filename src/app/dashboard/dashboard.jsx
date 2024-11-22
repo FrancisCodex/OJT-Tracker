@@ -15,11 +15,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { DatePickerWithRange } from "@/components/date-range-picker";
 import DashboardTables from "@/components/dashboard-tables";
 import trainees from '@/constants/traineeData';
 import agencies from "@/constants/agenciesData";
 import DashboardCharts from "@/components/dashboard-charts";
+import { Progress } from "@/components/ui/progress";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const [date, setDate] = React.useState({ from: null, to: null });
@@ -43,6 +53,16 @@ export default function Dashboard() {
   const totalAgencies = agencies.length;
 
   const ojtCompletionRate = calculateOJTCompletionRate();
+
+  // Calculate the top 3 agencies with the most trainees
+  const agencyTraineeCount = agencies.map(agency => ({
+    ...agency,
+    traineeCount: trainees.filter(trainee => trainee.company_id === agency.id).length,
+  }));
+
+  const topAgencies = agencyTraineeCount
+    .sort((a, b) => b.traineeCount - a.traineeCount)
+    .slice(0, 5);
 
   return (
     <div className="w-full flex-col box-border">
@@ -119,6 +139,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{ojtCompletionRate}%</div>
+              <Progress value={ojtCompletionRate} />
               <p className="text-xs text-muted-foreground">
                 <span className="text-green-500">↑ 1.2%</span> From last quarter
               </p>
@@ -126,7 +147,7 @@ export default function Dashboard() {
           </Card>
           <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Host Training Establishments</CardTitle>
+            <CardTitle className="text-sm font-medium">Host Training Establishments (HTE)</CardTitle>
             <Building2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -138,13 +159,34 @@ export default function Dashboard() {
           </Card>
         </div>
         <div className="grid gap-6 lg:grid-cols-2">
-          <DashboardCharts ojtCompletionRate={ojtCompletionRate} />
+
           <Card>
-            <CardHeader>
-              <CardTitle>Geography</CardTitle>
+            <CardHeader className="items-center">
+              <CardTitle>⭐Top Agencies with Most Trainees⭐</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[200px] w-full rounded-lg bg-muted/10" />
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>#</TableHead>
+                    <TableHead>Company Name</TableHead>
+                    <TableHead>Trainee's</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {topAgencies.map((agency, index) => (
+                    <TableRow key={agency.id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>
+                        <Link to={`/dashboard/coordinator/view-company/${agency.id}`} className="hover:underline">
+                          {agency.company_name}
+                        </Link>
+                      </TableCell>
+                      <TableCell className='font-semibold'>{agency.traineeCount}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </div>

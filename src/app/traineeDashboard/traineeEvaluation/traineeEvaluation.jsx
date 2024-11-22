@@ -36,9 +36,32 @@ const TraineeEvaluate = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Evaluation:', evaluation);
-    console.log('Problems Met:', ProblemsMet);
-    console.log('Other Concerns:', OtherConcerns);
+
+    // Validate that all questions are answered
+    for (const [category, items] of Object.entries(questions)) {
+      for (let i = 0; i < items.length; i++) {
+        if (!evaluation[category] || !evaluation[category][i]) {
+          toast({
+            title: "Error",
+            description: `Please answer all questions in the ${category} section.`,
+            variant: "destructive",
+            duration: 3000,
+          });
+          return;
+        }
+      }
+    }
+
+    // Validate that Problems Met and Other Concerns are not empty
+    if (!ProblemsMet || !OtherConcerns) {
+      toast({
+        title: "Error",
+        description: "Please fill in the Problems Met and Other Concerns sections.",
+        variant: "destructive",
+        duration: 3000,
+      });
+      return;
+    }
 
     toast({
       title: "Evaluation Submitted",
@@ -54,7 +77,7 @@ const TraineeEvaluate = () => {
   return (
     <div className="w-full mx-auto py-10">
       <Card className="w-full max-w-4xl mx-auto">
-        <CardHeader>
+        <CardHeader className='text-center'>
           <CardTitle className="text-2xl font-bold">Trainee Feedback Form</CardTitle>
         </CardHeader>
         <CardContent>
