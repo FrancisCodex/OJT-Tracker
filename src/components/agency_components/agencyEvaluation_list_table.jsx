@@ -42,7 +42,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 
-export default function EvaluationListTable({ data }) {
+export default function AgencyEvaluationTable({ data }) {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(6);
@@ -53,19 +53,6 @@ export default function EvaluationListTable({ data }) {
     course: null,
   });
   const navigate = useNavigate();
-
-  const getInitials = (name) => {
-    const namesArray = name.split(" ");
-    if (namesArray.length === 1) return namesArray[0].charAt(0).toUpperCase();
-    return namesArray[0].charAt(0).toUpperCase() + namesArray[1].charAt(0).toUpperCase();
-  };
-
-  const UserAvatar = ({ trainee }) => (
-    <Avatar>
-      <AvatarImage src={trainee.avatar} alt={trainee.name} />
-      <AvatarFallback>{getInitials(trainee.name)}</AvatarFallback>
-    </Avatar>
-  );
 
   const TableContent = ({ trainee }) => (
     <>
