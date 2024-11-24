@@ -22,7 +22,7 @@ import TraineeEvaluate from '@/app/traineeDashboard/traineeEvaluation/traineeEva
 import EvaluationList from '@/app/dashboard/evaluation/evaluationLIst';
 import AgencyEvaluationList from '@/app/agencyDashboard/evaluateTrainee/agencyEvaluationList';
 import CompanyTrainee from '@/app/agencyDashboard/companyTrainee/companyTrainee';
-
+import EvaluationCoordinator from '@/app/dashboard/evaluation/evaluationCoor';
 
 function App() {
   return (
@@ -54,7 +54,7 @@ function App() {
                   <Route path="/coordinator/view-trainee/:trainee_id" element={<PrivateRoute requiredRole="coordinator" component={TraineeProfile}/>}/>
                   <Route path="/coordinator/view-company/:company_id" element={<PrivateRoute requiredRole="coordinator" component={AgencyProfile} />} />
                   <Route path="/coordinator/evaluations" element={<PrivateRoute requiredRole="coordinator" component={EvaluationList} />} />
-                  <Route path="/coordinator/evaluate/:trainee_id" element={<PrivateRoute requiredRole="coordinator" component={Evaluation} />} />
+                  <Route path="/coordinator/evaluate/:trainee_id" element={<PrivateRoute requiredRole="coordinator" component={EvaluationCoordinator} />} />
                   <Route path="*" element={<h1>Not Found</h1>} />
                  
                   {/* Trainee Pages */}
