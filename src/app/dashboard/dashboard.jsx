@@ -159,7 +159,38 @@ export default function Dashboard() {
           </Card>
         </div>
         <div className="grid gap-6 lg:grid-cols-2">
+          {/* Trainees who are about to be finished */}
+          <Card>
+            <CardHeader className="items-center">
+              <CardTitle>⭐Trainees</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>#</TableHead>
+                    <TableHead>Company Name</TableHead>
+                    <TableHead>Trainee's</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {topAgencies.map((agency, index) => (
+                    <TableRow key={agency.id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>
+                        <Link to={`/dashboard/coordinator/view-company/${agency.id}`} className="hover:underline">
+                          {agency.company_name}
+                        </Link>
+                      </TableCell>
+                      <TableCell className='font-semibold'>{agency.traineeCount}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
 
+          {/* Top Agencies Card */}
           <Card>
             <CardHeader className="items-center">
               <CardTitle>⭐Top Agencies with Most Trainees⭐</CardTitle>
