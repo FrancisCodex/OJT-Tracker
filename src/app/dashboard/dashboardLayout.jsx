@@ -13,9 +13,11 @@ import SupervisorNavLinks from '@/constants/supervisorNavLinks';
 import { useSupabaseAuth } from '@/hooks/useSupabaseAuth';
 import { Loading } from '@/components/loading';
 import Footer from '@/components/footer';
+import { Navigate } from 'react-router-dom';
 
 export default function DashboardLayout({ children }) {
   const { user, loading } = useSupabaseAuth();
+
 
   if (loading) {
     return <div><Loading/></div>;

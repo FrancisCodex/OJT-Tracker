@@ -1,7 +1,7 @@
 const trainees = [
   {
     id: 1,
-    name: "FRANCIS ADRIAN ALTESING",
+    name: "Francis Adrian Altesing",
     email: "francisadrian.altesing@gmail.com",
     studentId: "202-00005",
     course: "BSIT",
@@ -16,7 +16,7 @@ const trainees = [
   },
   {
     id: 2,
-    name: "JOHN WICK",
+    name: "John Wick",
     email: "ilovedogs143@gmail.com",
     studentId: "202-00006",
     course: "BSIT",
@@ -31,7 +31,7 @@ const trainees = [
   },
   {
     id: 3,
-    name: "LIONEL MESSI",
+    name: "Lionel Messi",
     email: "viscabarca10@gmail.com",
     studentId: "202-00007",
     course: "BSIT",
@@ -46,8 +46,8 @@ const trainees = [
   },
   {
     id: 4,
-    name: "CRISTIANO RONALDO",
-    email: "christiano@gmail.com",
+    name: "Cristiano Ronaldo",
+    email: "cristiano@gmail.com",
     studentId: "202-00008",
     course: "BSIT",
     year: 4,

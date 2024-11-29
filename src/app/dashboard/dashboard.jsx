@@ -27,7 +27,7 @@ import { DatePickerWithRange } from "@/components/date-range-picker";
 import DashboardTables from "@/components/dashboard-tables";
 import trainees from '@/constants/traineeData';
 import agencies from "@/constants/agenciesData";
-import DashboardCharts from "@/components/dashboard-charts";
+import TraineeEvaluationResults from "@/constants/traineeEvaluationResults";
 import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
 
@@ -63,6 +63,20 @@ export default function Dashboard() {
   const topAgencies = agencyTraineeCount
     .sort((a, b) => b.traineeCount - a.traineeCount)
     .slice(0, 5);
+
+  // Sort and select top 5 trainees based on evaluation scores
+  const topTrainees = TraineeEvaluationResults
+    .sort((a, b) => b.evaluation_score - a.evaluation_score)
+    .slice(0, 5)
+    .map(evaluation => {
+      const trainee = trainees.find(t => t.id === evaluation.trainee_id);
+      const agency = agencies.find(a => a.id === trainee.company_id);
+      return {
+        ...evaluation,
+        trainee_name: trainee ? trainee.name : 'Unknown',
+        company_name: agency ? agency.company_name : 'Unknown',
+      };
+    });
 
   return (
     <div className="w-full flex-col box-border">
@@ -159,30 +173,36 @@ export default function Dashboard() {
           </Card>
         </div>
         <div className="grid gap-6 lg:grid-cols-2">
-          {/* Trainees who are about to be finished */}
+          {/* Top Performing Trainees */}
           <Card>
             <CardHeader className="items-center">
-              <CardTitle>⭐Trainees</CardTitle>
+              <CardTitle>🏆Top Performing Trainees</CardTitle>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>#</TableHead>
-                    <TableHead>Company Name</TableHead>
-                    <TableHead>Trainee's</TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Company</TableHead>
+                    <TableHead>Evaluation Score</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {topAgencies.map((agency, index) => (
-                    <TableRow key={agency.id}>
+                  {topTrainees.map((trainee, index) => (
+                    <TableRow key={trainee.id}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>
-                        <Link to={`/dashboard/coordinator/view-company/${agency.id}`} className="hover:underline">
-                          {agency.company_name}
+                        <Link to={`/dashboard/coordinator/view-trainee/${trainee.id}`} className="hover:underline">
+                        {trainee.trainee_name}
+                        </Link>
+                        </TableCell>
+                      <TableCell>
+                        <Link to={`/dashboard/coordinator/view-company/${trainee.company_id}`} className="hover:underline">
+                          {trainee.company_name}
                         </Link>
                       </TableCell>
-                      <TableCell className='font-semibold'>{agency.traineeCount}</TableCell>
+                      <TableCell className='font-semibold'>{trainee.evaluation_score.toFixed(2)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

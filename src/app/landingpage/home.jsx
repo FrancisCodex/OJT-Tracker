@@ -12,8 +12,8 @@ const Home = () => {
         <div className='flex justify-center items-center'>
           <div className='w-full'>
           <section className="w-full py-24 bg-accent">
-          <div className=" px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className=" px-4 md:px-6">
+              <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">OnTheJob <span className='text-primary'>Tracker</span></h1>
               <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
               A Tool to  track and evaluate the performance of students in their On-the-Job Training (OJT)
@@ -21,9 +21,9 @@ const Home = () => {
               <p className='max-w-[900px] text-red-500 text-sm dark:text-gray-400'>
               (⚠️NOTE: THIS IS STILL UNDER DEVELOPMENT SO SOME PAGES ARE STILL MISSING⚠️)
               </p>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-3 lg:gap-12">

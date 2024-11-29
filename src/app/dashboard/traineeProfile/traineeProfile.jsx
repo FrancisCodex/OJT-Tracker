@@ -75,14 +75,11 @@ const TraineeProfile = () => {
         </BreadcrumbList>
       </Breadcrumb>
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="bg-background border-b rounded-none w-full justify-start h-auto p-0 space-x-3">
+        <TabsList className="bg-background border-b rounded-none w-fit justify-start h-auto p-0 space-x-3">
           <TabsTrigger value="overview" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Overview</TabsTrigger>
-          <TabsTrigger value="timeoff" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Time Off</TabsTrigger>
-          <TabsTrigger value="files" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Files</TabsTrigger>
-          <TabsTrigger value="onboarding" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Onboarding</TabsTrigger>
+          <TabsTrigger value="timeoff" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Performance</TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-6">
-            {/* Add Resizeable Panels here */}
           <div className="grid lg:grid-cols-[300px,1fr] gap-6">
             <div className="text-start px-3 md:grid md:grid-cols-3 md:gap-y-6 md:gap-x-4 lg:block md:space-y-0 lg:space-y-6 w-fit">
               <div className="row-span-2 flex items-start gap-2">
