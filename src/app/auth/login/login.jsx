@@ -83,7 +83,7 @@ const Login = () => {
             </div>
             <form onSubmit={handleSubmit} className="grid gap-2">
               <div className="grid gap-2 border p-3">
-                <p classname='text-gray-500'>For testing Purposes only</p>
+                <p className='text-gray-500'>For testing Purposes only</p>
                 <Label htmlFor="accountType">Select Account Type</Label>
                 <Select onValueChange={handleAccountSelect}>
                   <SelectTrigger>

@@ -23,6 +23,7 @@ import EvaluationList from '@/app/dashboard/evaluation/evaluationLIst';
 import AgencyEvaluationList from '@/app/agencyDashboard/evaluateTrainee/agencyEvaluationList';
 import CompanyTrainee from '@/app/agencyDashboard/companyTrainee/companyTrainee';
 import EvaluationCoordinator from '@/app/dashboard/evaluation/evaluationCoor';
+import DashboardRedirect from '@/app/redirects/dashboard_redirect';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
             element={
               <DashboardLayout>
                 <Routes>
+                  {/* <Route path="/" element={<DashboardRedirect/>} /> */}
                   {/* Coordinator Pages */}
                   <Route path="/coordinator" element={<PrivateRoute requiredRole="coordinator" component={Dashboard} />} />
                   <Route path="/coordinator/all-trainees" element={<PrivateRoute requiredRole="coordinator" component={AllTrainees} />} />
