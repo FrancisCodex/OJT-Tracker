@@ -77,14 +77,16 @@ const Navbar = () => {
           >
             Home
           </Link>
-          <Link
+          {/* <Link
             to="/about"
             className="text-black hover:text-primary dark:text-gray-400 dark:hover:text-gray-50"
           >
             About
-          </Link>
+          </Link> */}
           <Link
-            to="/docs"
+            to="https://drive.google.com/file/d/11UCuqrUOtOhPqLXk2LuHPJBoDNbPBFJy/view?usp=sharing"
+            target="_blank"
+            rel="noreferrer"
             className="text-black hover:text-primary dark:text-gray-400 dark:hover:text-gray-50"
           >
             Documentation
