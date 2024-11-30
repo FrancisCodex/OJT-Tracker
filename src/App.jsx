@@ -25,7 +25,8 @@ import CompanyTrainee from '@/app/agencyDashboard/companyTrainee/companyTrainee'
 import EvaluationCoordinator from '@/app/dashboard/evaluation/evaluationCoor';
 import DashboardRedirect from '@/app/redirects/dashboard_redirect';
 import Docs from '@/app/documentation/docs';
-import About from '@/app/about/about';
+// import About from '@/app/about/about';
+import ContactUs from './app/contact/contactus';
 
 function App() {
   return (
@@ -34,12 +35,12 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
-          <Route path="/about" element={<PublicLayout><About/></PublicLayout>} />
+          {/* <Route path="/about" element={<PublicLayout><About/></PublicLayout>} /> */}
           <Route path="/login" element={<PublicLayout><Login /></PublicLayout>} />
           <Route path="/register" element={<PublicLayout><Register /></PublicLayout>} />
           <Route path="/Settings" element={<PublicLayout><h1>⚒️ Work in Progress ⚒️</h1></PublicLayout>} />
           <Route path="/docs" element={<PublicLayout><Docs/></PublicLayout>} />
-          <Route path="/contact" element={<PublicLayout><h1>⚒️ Work in Progress ⚒️</h1></PublicLayout>} />
+          <Route path="/contact" element={<PublicLayout><ContactUs/></PublicLayout>} />
           {/* End of Public Routes */}
 
 
