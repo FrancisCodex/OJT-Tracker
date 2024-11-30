@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import trainees from '@/constants/traineeData';
 import agencies from '@/constants/agenciesData';
+import { Separator } from '@/components/ui/separator';
 
 const AgencyProfile = () => {
   const { company_id } = useParams();
@@ -66,65 +67,76 @@ const AgencyProfile = () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="bg-background border-b rounded-none w-fit justify-start h-auto p-0 space-x-3">
-          <TabsTrigger value="overview" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Overview</TabsTrigger>
-          <TabsTrigger value="timeoff" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Time Off</TabsTrigger>
-          <TabsTrigger value="files" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Files</TabsTrigger>
-          <TabsTrigger value="onboarding" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Onboarding</TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid lg:grid-cols-[300px,1fr] gap-6">
-            <div className="text-start px-3 md:grid md:grid-cols-3 md:gap-y-6 md:gap-x-4 lg:block md:space-y-0 lg:space-y-6 w-fit">
-              <div className="row-span-2 flex items-start gap-2">
-                <div className='w-fit'>
-                  <h1 className="text-md lg:text-lg font-semibold">{company.company_name}</h1>
-                  <p className="text-sm text-muted-foreground">Tech Company</p>
-                </div>
+      <div>
+        <div>
+          <h1>
+            Company Profile
+          </h1>
+        </div>
+        <div className='py-5'>
+          <Separator />
+        </div>
+          <div className="text-start px-3 flex flex-col dividex-x-0 divide-y-2 md:divide-y-0 md:divide-x-2 md:flex-row justify-between w-full">
+            <div className="row-span-2 flex items-start gap-2 pb-2">
+              <div className='w-fit'>
+                <h1 className="text-md lg:text-lg font-semibold">{company.company_name}</h1>
+                <p className="text-sm text-muted-foreground">Tech Company</p>
               </div>
+            </div>
 
-              <div className="space-y-4">
-                <h2 className="text-lg font-semibold">About</h2>
-                <div className="space-y-3 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4" />
-                    <span>(629) 555-0123</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4" />
-                    <span>{company.representative_email}</span>
-                  </div>
+            <div className="space-y-4 py-2 px-2">
+              <h2 className="text-lg font-semibold">About</h2>
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4" />
+                  <span>(629) 555-0123</span>
                 </div>
-              </div>
-
-              <div className="space-y-4">
-                <h2 className="text-lg font-semibold">Address</h2>
-                <div className="space-y-3 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4" />
-                    <span>{company.company_address}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    <span>San Francisco CA, 94102</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4 md:col-span-2">
-                <h2 className="text-lg font-semibold">Representative Detail</h2>
-                <div className="space-y-3 text-sm">
-                  <div>
-                    <span className="text-muted-foreground">Representative:</span>
-                    <span className="ml-2">{company.representative_name}</span>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Representative Email:</span>
-                    <span className="ml-2">{company.representative_email}</span>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4" />
+                  <span>{company.representative_email}</span>
                 </div>
               </div>
             </div>
+
+            <div className="space-y-4 py-2 px-2">
+              <h2 className="text-lg font-semibold">Address</h2>
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center gap-2">
+                  <Building2 className="w-4 h-4" />
+                  <span>{company.company_address}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  <span>San Francisco CA, 94102</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4 py-2 px-2">
+              <h2 className="text-lg font-semibold">Representative Detail</h2>
+              <div className="space-y-3 text-sm">
+                <div>
+                  <span className="text-muted-foreground">Representative:</span>
+                  <span className="ml-2">{company.representative_name}</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Representative Email:</span>
+                  <span className="ml-2">{company.representative_email}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+            <div>
+              <Separator />
+            </div>
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList className="bg-background border-b rounded-none w-fit justify-start h-auto p-0 space-x-3">
+          <TabsTrigger value="overview" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Overview</TabsTrigger>
+          {/* <TabsTrigger value="performance" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Performance</TabsTrigger> */}
+        </TabsList>
+        <TabsContent value="overview" className="space-y-6">
+          <div className="grid grid-rows-1 gap-6">
             <div className="space-y-6">
               <h2 className="text-md font-semibold">Trainees Working in this Company</h2>
               <Card>
@@ -154,7 +166,7 @@ const AgencyProfile = () => {
                                 <TooltipProvider>
                                   <Tooltip>
                                     <TooltipTrigger asChild>
-                                      <Button variant="outline" size="icon">
+                                      <Button variant="outline" size="icon" className='text-primary hover:text-primary'>
                                         <a href={'/dashboard/coordinator/view-trainee/'+trainee.id}>
                                         <Eye className="h-4 w-4" />
                                         </a>
@@ -175,6 +187,9 @@ const AgencyProfile = () => {
             </div>
           </div>
         </TabsContent>
+        {/* <TabsContent value="performance" className="space-y-6">
+          <h1>Working In Progress</h1>
+        </TabsContent> */}
       </Tabs>
     </div>
   );

@@ -30,6 +30,8 @@ import {
 import trainees from '@/constants/traineeData';
 import traineeSubmissions from '@/constants/traineeSubmissions';
 import agencies from '@/constants/agenciesData';
+import { Separator } from '@/components/ui/separator';
+import { Progress } from '@/components/ui/progress';
 
 const TraineeProfile = () => {
   const { trainee_id } = useParams();
@@ -53,9 +55,22 @@ const TraineeProfile = () => {
     }
   }, [trainee_id]);
 
+  const calculateOJTCompletionRate = (trainee) => {
+    const today = new Date();
+    const startDate = new Date(trainee.date_started_ojt);
+    const totalDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+    const totalWeeks = Math.floor(totalDays / 7);
+    const totalWorkingDays = totalWeeks * 5 + (totalDays % 7);
+    const totalWorkingHours = totalWorkingDays * 8;
+    const completionRate = (totalWorkingHours / trainee.required_hours) * 100;
+    return Math.min(completionRate, 100).toFixed(2); // Cap at 100%
+  };
+
   if (!trainee) {
     return <div>Loading...</div>;
   }
+
+  const ojtCompletionRate = calculateOJTCompletionRate(trainee);
 
   return (
     <div className="w-full pt-10 lg:pt-0 px-2 space-y-6 pb-10">
@@ -74,15 +89,15 @@ const TraineeProfile = () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="bg-background border-b rounded-none w-fit justify-start h-auto p-0 space-x-3">
-          <TabsTrigger value="overview" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Overview</TabsTrigger>
-          <TabsTrigger value="timeoff" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Performance</TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid lg:grid-cols-[300px,1fr] gap-6">
-            <div className="text-start px-3 md:grid md:grid-cols-3 md:gap-y-6 md:gap-x-4 lg:block md:space-y-0 lg:space-y-6 w-fit">
-              <div className="row-span-2 flex items-start gap-2">
+      <div>
+        <div>
+          <h1>Trainee Profile</h1>
+        </div>
+        <div className='py-5'>
+          <Separator />
+        </div>
+      <div className="text-start px-3 flex flex-col dividex-x-0 divide-y-2 md:divide-y-0 md:divide-x-2 md:flex-row justify-between w-full">
+              <div className="flex flex-col items-start gap-2 pb-2">
                 <Avatar className="w-16 h-16">
                   <AvatarImage src={trainee.avatar} />
                   <AvatarFallback>{trainee.name[0]}</AvatarFallback>
@@ -93,39 +108,7 @@ const TraineeProfile = () => {
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <h2 className="text-lg font-semibold">About</h2>
-                <div className="space-y-3 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4" />
-                    <span>(629) 555-0123</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4" />
-                    <span>{trainee.email}</span>
-                  </div>
-                    <div className="flex items-center gap-2">
-                    <GraduationCap className="w-4 h-4" />
-                    <span>{trainee.course} - {trainee.year}</span>
-                    </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <h2 className="text-lg font-semibold">Address</h2>
-                <div className="space-y-3 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4" />
-                    <span>390 Market Street, Suite 200</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    <span>San Francisco CA, 94102</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4 md:col-span-2">
+              <div className="space-y-4 py-2 px-2">
                 <h2 className="text-lg font-semibold">OJT details</h2>
                 <div className="space-y-3 text-sm">
                   <div>
@@ -144,9 +127,58 @@ const TraineeProfile = () => {
                     <span className="text-muted-foreground">Title:</span>
                     <span className="ml-2">Intern</span>
                   </div>
+                  <div>
+                    {/* Progress */}
+                    <span className="text-muted-foreground">Progress:</span>
+                    <span className="ml-2 font-semibold">{ojtCompletionRate}%</span>
+                    <Progress value={ojtCompletionRate} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4 py-2 px-2">
+                <h2 className="text-lg font-semibold">About</h2>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4" />
+                    <span>(629) 555-0123</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4" />
+                    <span>{trainee.email}</span>
+                  </div>
+                    <div className="flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4" />
+                    <span>{trainee.course} - {trainee.year}</span>
+                    </div>
+                </div>
+              </div>
+
+              <div className="space-y-4 py-2 px-2">
+                <h2 className="text-lg font-semibold">Address</h2>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="w-4 h-4" />
+                    <span>390 Market Street, Suite 200</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4" />
+                    <span>San Francisco CA, 94102</span>
+                  </div>
                 </div>
               </div>
             </div>
+      </div>
+            <div>
+              <Separator />
+            </div>
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList className="bg-background border-b rounded-none w-fit justify-start h-auto p-0 space-x-3">
+          <TabsTrigger value="overview" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Documents</TabsTrigger>
+          {/* <TabsTrigger value="timeoff" className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary">Performance</TabsTrigger> */}
+        </TabsList>
+        <TabsContent value="overview" className="space-y-6">
+          <div className="grid grid-rows-1 gap-6">
             <div className="space-y-6">
               <h2 className="text-md font-semibold">Documents Submitted</h2>
               <Card>
