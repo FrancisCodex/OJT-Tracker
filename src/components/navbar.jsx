@@ -64,7 +64,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background dark:border-zinc-800 dark:text-white">
+    <header className="sticky top-0 z-[9999] w-full border-b bg-background dark:border-zinc-800 dark:text-white">
       <div className="flex justify-between h-16 items-center w-full px-4 md:px-6">
         <Link to="/" className="flex items-center col-span-1">
           <img src={logoSrc} alt="OnTheJob-App Logo" className="h-8 w-auto" />

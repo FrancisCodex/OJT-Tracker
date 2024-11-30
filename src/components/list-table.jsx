@@ -5,7 +5,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ClipboardEdit,
-  FileText,
+  Eye,
   Filter,
   Search,
   ChevronDown,
@@ -28,6 +28,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { Badge } from "@/components/ui/badge";
 
 export default function ListTable({ data }) {
@@ -61,16 +67,30 @@ export default function ListTable({ data }) {
 
       <TableCell>
         <div className="flex gap-2">
-        <Button variant="outline" size="icon">
-            <a href={'/dashboard/coordinator/view-trainee/'+trainee.id}>
-            <FileText className="h-4 w-4 text-blue-500" />
-            </a>
-          </Button>
-          <Button variant="outline" size="icon">
-            <a href={'/dashboard/coordinator/evaluate/'+trainee.id}>
-            <ClipboardEdit className="h-4 w-4 text-green-500" />
-            </a>
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <a href={'/dashboard/coordinator/view-trainee/' + trainee.id}>
+                    <Eye className="h-4 w-4 text-blue-500" />
+                  </a>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>View</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <a href={'/dashboard/coordinator/evaluate/' + trainee.id}>
+                    <ClipboardEdit className="h-4 w-4 text-green-500" />
+                  </a>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Evaluate</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </TableCell>
     </>
