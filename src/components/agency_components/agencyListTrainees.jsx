@@ -28,6 +28,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 
 export default function AgencyTraineeList({ data }) {
@@ -35,7 +43,11 @@ export default function AgencyTraineeList({ data }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
-
+  const [filterConfig, setFilterConfig] = useState({
+    evaluated: null,
+    completed: null,
+    course: null,
+  });
   const TableContent = ({ trainee }) => (
     <>
       <TableCell className="font-medium">{trainee.name}</TableCell>
@@ -95,12 +107,27 @@ export default function AgencyTraineeList({ data }) {
   });
 
   // Filter trainees based on search
-  const filteredTrainees = sortedTrainees.filter(
-    (trainee) =>
+  const filteredTrainees = sortedTrainees.filter((trainee) => {
+    const matchesSearch =
       trainee.name.toLowerCase().includes(search.toLowerCase()) ||
       trainee.email.toLowerCase().includes(search.toLowerCase()) ||
-      trainee.studentId.includes(search)
-  );
+      trainee.studentId.includes(search);
+
+    const matchesEvaluated =
+      filterConfig.evaluated === null ||
+      (filterConfig.evaluated === "evaluated" && trainee.evaluated) ||
+      (filterConfig.evaluated === "notEvaluated" && !trainee.evaluated);
+
+    const matchesCompleted =
+      filterConfig.completed === null ||
+      (filterConfig.completed === "completed" && trainee.completed) ||
+      (filterConfig.completed === "notCompleted" && !trainee.completed);
+
+    const matchesCourse =
+      filterConfig.course === null || trainee.course === filterConfig.course;
+
+    return matchesSearch && matchesEvaluated && matchesCompleted && matchesCourse;
+  });
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredTrainees.length / rowsPerPage);
@@ -120,10 +147,89 @@ export default function AgencyTraineeList({ data }) {
             className="pl-8"
           />
         </div>
-        <Button variant="outline">
-          <Filter className="h-4 w-4 mr-2" />
-          Filter
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              <Filter className="h-4 w-4 mr-2" />
+              Filter
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-full"> {/* Adjust the width and height here */}
+            <DropdownMenuLabel>Filter Options</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <div className="grid grid-cols-3 divide-x divide-gray-200">
+                <div className="px-2">
+                    <DropdownMenuLabel>Evaluated</DropdownMenuLabel>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.evaluated === null}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, evaluated: null })}
+                    >
+                    All
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.evaluated === "evaluated"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, evaluated: "evaluated" })}
+                    >
+                    Evaluated
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.evaluated === "notEvaluated"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, evaluated: "notEvaluated" })}
+                    >
+                    Not Evaluated
+                    </DropdownMenuCheckboxItem>
+                </div>
+                <div className="px-2">
+                    <DropdownMenuLabel>Completed</DropdownMenuLabel>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.completed === null}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, completed: null })}
+                    >
+                    All
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.completed === "completed"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, completed: "completed" })}
+                    >
+                    Completed
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.completed === "notCompleted"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, completed: "notCompleted" })}
+                    >
+                    Not Completed
+                    </DropdownMenuCheckboxItem>
+                </div>
+                <div className="px-2">
+                    <DropdownMenuLabel>Course</DropdownMenuLabel>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.course === null}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, course: null })}
+                    >
+                    All
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.course === "BSIT"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, course: "BSIT" })}
+                    >
+                    BSIT
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.course === "BSIS"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, course: "BSIS" })}
+                    >
+                    BSIS
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                    checked={filterConfig.course === "BSCS"}
+                    onCheckedChange={() => setFilterConfig({ ...filterConfig, course: "BSCS" })}
+                    >
+                    BSCS
+                    </DropdownMenuCheckboxItem>
+                </div>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="border rounded-lg overflow-x-auto max-w-[100vw]">
