@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Building2, Mail, Phone, GraduationCap } from 'lucide-react';
+import { Building2, Mail, Phone, GraduationCap, ExternalLink } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useParams } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
@@ -123,6 +123,7 @@ const EvaluationCoordinator = () => {
                   <AvatarFallback className='bg-accent rounded-full p-2'>{getInitials(trainee.name)}</AvatarFallback>
                 </Avatar>
                 <h1 className="text-md lg:text-lg font-semibold">{trainee.name}</h1>
+                <a href={'/dashboard/coordinator/view-trainee/' + trainee.id}><ExternalLink className='h-4 w-4' /></a>
               </div>
               <p className="text-sm text-muted-foreground">#{trainee.studentId}</p>
               <div>
